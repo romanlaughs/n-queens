@@ -135,22 +135,81 @@
           return true;
         }
       }
-      return false; // fixme
+      return false;
     },
-
-
 
     // Major Diagonals - go from top-left to bottom-right
     // --------------------------------------------------------------
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      //console.log('INPUT: ', majorDiagonalColumnIndexAtFirstRow);
+      var count = 0;
+      var result = false;
+
+      //console.log('attributes: ', this.attributes);
+      var hasConflict = function(row, index, obj) {
+        //console.log(obj);
+        //debugger;
+        var nextRow = Number(row) + 1;
+        var nextElement = index + nextRow;
+        var innerResult = false;
+        for (var k in obj) {
+          var closure = innerResult;
+          if (k === 'n') {
+            return false;
+          }
+          //debugger;
+          if (Number(k) < nextRow) {
+            continue;
+          }
+
+          var thisArray = obj[k];
+          for (var n = 0; n < thisArray.length; n++) {
+            if (n < nextElement) {
+              continue;
+            } else {
+              if (thisArray[n] === 1) {
+                closure = true;
+              }
+            }
+          }
+          innerResult = closure;
+        }
+        console.log(innerResult);
+        return innerResult;
+      };
+
+      for (var i in this.attributes) {
+        // if (i === 'n') {
+        //   continue;
+        // }
+        // i => 0, 1, 2, 3, n
+        var array = this.attributes[i]; // arrray = 4
+        for (var j = 0; j < array.length; j++) {
+          if (array[j] === 0) {
+            continue;
+          } else {
+          // check for diagonal conflicts
+            result = (hasConflict(i, j, this.attributes));
+          }
+        }
+      }
+      return result;
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      console.log(this.attributes);
+      console.log('_________________');
+      var result = false;
+      for (var i in this.attributes) {
+        // debugger;
+        if (this.hasMajorDiagonalConflictAt(i)) {
+          result = true;
+        }
+      }
+      return result; // fixme
     },
 
 
